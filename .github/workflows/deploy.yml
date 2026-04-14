@@ -32,8 +32,26 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}" >> .env.production
-          echo "VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}" >> .env.production
+          cat << EOF > .env.production
+          VITE_SUPABASE_URL=${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY=${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          EOF
+
+      - name: Build Diagnostics
+        run: |
+          echo "==== Build Diagnostics ===="
+          echo "Checking .env.production file..."
+          ls -la .env.production
+          LINE_COUNT=$(wc -l < .env.production)
+          echo "Number of lines in .env.production: $LINE_COUNT"
+          URL_LEN=${#VITE_SUPABASE_URL}
+          KEY_LEN=${#VITE_SUPABASE_ANON_KEY}
+          echo "VITE_SUPABASE_URL detected with length: ${#VITE_SUPABASE_URL}"
+          echo "VITE_SUPABASE_ANON_KEY detected with length: ${#VITE_SUPABASE_ANON_KEY}"
+          if [ "$LINE_COUNT" -lt 2 ]; then echo "WARNING: .env.production seems truncated!"; fi
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
       - name: Build
         run: npm run build
