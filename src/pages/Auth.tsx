@@ -290,6 +290,10 @@ export default function Auth() {
               </button>
             </p>
           )}
+
+          <div className="absolute bottom-4 right-6 text-[10px] text-slate-600 font-mono tracking-widest opacity-50 uppercase pointer-events-none">
+            Deployment v1.0.9
+          </div>
         </div>
       </motion.div>
     </div>
