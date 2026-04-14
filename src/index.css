@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-50: #fff7ed;
+  --color-brand-100: #ffedd5;
+  --color-brand-400: #fb923c;
+  --color-brand-500: #f97316;
+  --color-brand-600: #ea580c;
+  --color-brand-900: #7c2d12;
+  --color-brand-950: #431407;
+}
+
+body {
+  background-color: #000000;
+  color: #f8fafc; /* slate-50 */
+  color: #f8fafc; /* slate-50 */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Premium Animated Background Elements */
+.tech-grid-bg {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: 
+    linear-gradient(rgba(249, 115, 22, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.06) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: grid-slide 30s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: center;
+  transform: perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+}
+
+.tech-grid-fade {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, transparent 0%, transparent 20%, #000000 80%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+@keyframes grid-slide {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 0 60px;
+  }
+}
