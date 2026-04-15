@@ -15,6 +15,15 @@ const supabaseAdmin = serviceRoleKey
   ? createClient(supabaseUrl, serviceRoleKey)
   : null;
 
+console.log('🔍 [Admin Debug]', {
+  hasUrl: !!import.meta.env.VITE_SUPABASE_URL,
+  urlLength: import.meta.env.VITE_SUPABASE_URL?.length || 0,
+  hasAnonKey: !!import.meta.env.VITE_SUPABASE_ANON_KEY,
+  anonKeyLength: import.meta.env.VITE_SUPABASE_ANON_KEY?.length || 0,
+  hasServiceKey: !!import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY,
+  serviceKeyLength: import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY?.length || 0
+});
+
 export default function Admin() {
   const { profile, loading: authLoading } = useAuth();
   const [profiles, setProfiles] = useState<Profile[]>([]);
