@@ -34,9 +34,11 @@ jobs:
         run: |
           echo "VITE_SUPABASE_URL=$VITE_SUPABASE_URL" > .env.production
           echo "VITE_SUPABASE_ANON_KEY=$VITE_SUPABASE_ANON_KEY" >> .env.production
+          echo "VITE_SUPABASE_SERVICE_ROLE_KEY=$VITE_SUPABASE_SERVICE_ROLE_KEY" >> .env.production
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Build Diagnostics
         run: |
@@ -45,17 +47,21 @@ jobs:
           ls -la .env.production
           LINE_COUNT=$(wc -l < .env.production)
           echo "Number of lines in .env.production: $LINE_COUNT"
-          URL_LEN=${#VITE_SUPABASE_URL}
-          KEY_LEN=${#VITE_SUPABASE_ANON_KEY}
           echo "VITE_SUPABASE_URL detected with length: ${#VITE_SUPABASE_URL}"
           echo "VITE_SUPABASE_ANON_KEY detected with length: ${#VITE_SUPABASE_ANON_KEY}"
-          if [ "$LINE_COUNT" -lt 2 ]; then echo "WARNING: .env.production seems truncated!"; fi
+          echo "VITE_SUPABASE_SERVICE_ROLE_KEY detected with length: ${#VITE_SUPABASE_SERVICE_ROLE_KEY}"
+          if [ "$LINE_COUNT" -lt 3 ]; then echo "WARNING: .env.production seems truncated or missing variables!"; fi
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Build
         run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.VITE_SUPABASE_SERVICE_ROLE_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

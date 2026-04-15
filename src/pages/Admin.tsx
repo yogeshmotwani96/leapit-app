@@ -7,10 +7,13 @@ import { Navigate, Link } from 'react-router-dom';
 import { CheckCircle2, XCircle, Clock, ShieldAlert, ArrowLeft, Download, Key, Activity, Video } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseAdmin = createClient(
-  import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
-);
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://placeholder.supabase.co';
+const serviceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY || '';
+
+// Create admin client only if key is available, to prevent app crash
+const supabaseAdmin = serviceRoleKey 
+  ? createClient(supabaseUrl, serviceRoleKey)
+  : null;
 
 export default function Admin() {
   const { profile, loading: authLoading } = useAuth();
@@ -59,7 +62,10 @@ export default function Admin() {
 
   const executePasswordOverride = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!resetUserId) return;
+    if (!resetUserId || !supabaseAdmin) {
+      alert("Administrator client not initialized. Check your SERVICE_ROLE_KEY.");
+      return;
+    }
     try {
       const { error } = await supabaseAdmin.auth.admin.updateUserById(resetUserId, { password: newPassword });
       if (error) throw error;
